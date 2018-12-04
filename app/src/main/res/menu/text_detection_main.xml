@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.chenty.demoyolo.Yolo">
+
+    <item
+        android:id="@+id/action_copy"
+        android:orderInCategory="99"
+        android:showAsAction="never"
+        android:title="@string/action_copy"
+        />
+
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_help"
+        />
+
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="101"
+        android:showAsAction="never"
+        android:title="@string/action_exit"
+        />
+
+</menu>

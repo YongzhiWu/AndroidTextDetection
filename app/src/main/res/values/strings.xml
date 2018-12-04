@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Text Detection</string>
+    <string name="action_settings">Settings</string>
+    <string name="capture">capture</string>
+    <string name="analyse">detect</string>
+    <string name="exactres">exactres</string>
+    <string name="selectimg" >selectimg</string>
+    <string name="copyright">CV Project by Mobile Vision</string>
+    <string name="tip_start">Click Detect</string>
+    <string name="contactme">about</string>
+    <string name="action_help">about</string>
+    <string name="action_exit">exit</string>
+    <string name="takephoto">take photo</string>
+    <string name="action_copy">Exactres Model Again</string>
+</resources>
