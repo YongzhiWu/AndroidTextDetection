@@ -26,14 +26,6 @@
                 <!--android:text="@string/exactres" />-->
 
             <Button
-                android:id="@+id/analyse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="analyseClick"
-                android:text="@string/analyse" />
-
-            <Button
                 android:id="@+id/selectimg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,6 +40,22 @@
                 android:layout_weight="1"
                 android:onClick="takephotoClick"
                 android:text="@string/takephoto"/>
+
+            <Button
+                android:id="@+id/analyse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="analyseClick"
+                android:text="@string/analyse" />
+
+            <Button
+                android:id="@+id/face_detect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="faceAnalyseClick"
+                android:text="@string/face_detect" />
 
         </LinearLayout>
 

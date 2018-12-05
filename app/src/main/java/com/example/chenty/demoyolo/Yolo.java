@@ -53,6 +53,7 @@ public class Yolo extends AppCompatActivity {
     Bitmap srcimg;
 
     String srcimgpath;
+    String detect_type;
 
     private Uri imageUri;
 
@@ -265,7 +266,7 @@ public class Yolo extends AppCompatActivity {
 
         new Thread(new Runnable() {
             public void run() {
-                double runtime = testyolo(srcimgpath);
+                double runtime = testyolo(srcimgpath, detect_type);
                 Log.i(TAG, "yolo run time " + runtime);
                 Message msg = new Message();
                 msg.what = DETECT_FINISH;
@@ -298,6 +299,15 @@ public class Yolo extends AppCompatActivity {
     public void analyseClick(View v){
 
 //        view_dstimg.setImageResource(R.drawable.yologo_1);
+        detect_type = "text";
+        view_status.setText("检测中 ...");
+        yoloDetect();
+    }
+
+    public void faceAnalyseClick(View v){
+
+//        view_dstimg.setImageResource(R.drawable.yologo_1);
+        detect_type = "face";
         view_status.setText("检测中 ...");
         yoloDetect();
     }
@@ -386,6 +396,6 @@ public class Yolo extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native void inityolo(String cfgfile, String weightfile);
-    public native double testyolo(String imgfile);
+    public native double testyolo(String imgfile, String flag);
     public native boolean detectimg(Bitmap dst, Bitmap src);
 }

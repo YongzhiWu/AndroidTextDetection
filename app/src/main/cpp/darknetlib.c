@@ -17,15 +17,16 @@
 char *voc_names[] = {"aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"};
 
 //rewrite test demo for android
-double test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh, char *outfile, int fullscreen)
+double test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, char *name_list, float thresh, float hier_thresh, char *outfile, int fullscreen)
 {
     LOGD("data=%s",datacfg);
     LOGD("cfg=%s",cfgfile);
     LOGD("wei=%s",weightfile);
     LOGD("img=%s",filename);
+    LOGD("namelist=%s", name_list);
 
     //list *options = read_data_cfg(datacfg);
-    char *name_list = "/sdcard/yolo/data/coco.names";//option_find_str(options, "names", "data/names.list");
+//    char *name_list = "/sdcard/yolo/data/coco.names";//option_find_str(options, "names", "data/names.list");
     char **names = get_labels(name_list);
 
 
@@ -126,22 +127,34 @@ Java_com_example_chenty_demoyolo_Yolo_inityolo(JNIEnv *env, jobject obj, jstring
 // process imgfile to /sdcard/yolo/out
 jdouble
 JNICALL
-Java_com_example_chenty_demoyolo_Yolo_testyolo(JNIEnv *env, jobject obj, jstring imgfile)
+Java_com_example_chenty_demoyolo_Yolo_testyolo(JNIEnv *env, jobject obj, jstring imgfile, jstring flag)
 {
     double time;
     const char *imgfile_str = (*env)->GetStringUTFChars(env, imgfile, 0);
+    const char *flag_str = (*env)->GetStringUTFChars(env, flag, 0);
 
     char *datacfg_str = "/sdcard/yolo/cfg/coco.data";
     char *cfgfile_str = "/sdcard/yolo/cfg/yolov3-tiny.cfg";
     char *weightfile_str = "/sdcard/yolo/weights/yolov3-tiny.weights";
+    char *namelist_str = "/sdcard/yolo/data/coco.names";
     //char *imgfile_str = "/sdcard/yolo/data/dog.jpg";
     char *outimgfile_str = "/sdcard/yolo/out";
 
+    if (strcmp(flag_str, "face") == 0){
+        datacfg_str = "/sdcard/yolo/cfg/face.data";
+        cfgfile_str = "/sdcard/yolo/cfg/yolov3-tiny-face.cfg";
+        weightfile_str = "/sdcard/yolo/weights/yolov3-tiny-face.weights";
+        namelist_str = "/sdcard/yolo/data/face.names";
+        //char *imgfile_str = "/sdcard/yolo/data/dog.jpg";
+        outimgfile_str = "/sdcard/yolo/out";
+    }
+
     time = test_detector(datacfg_str, cfgfile_str,
-                  weightfile_str, imgfile_str,
+                  weightfile_str, imgfile_str, namelist_str,
                   0.2f, 0.5f, outimgfile_str, 0);
 
     (*env)->ReleaseStringUTFChars(env, imgfile, imgfile_str);
+    (*env)->ReleaseStringUTFChars(env, flag, flag_str);
     return time;
 }
 

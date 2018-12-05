@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">文字检测</string>
+    <string name="app_name">图像检测</string>
     <string name="action_settings">设置</string>
     <string name="capture">采集</string>
-    <string name="analyse">检测</string>
+    <string name="analyse">文本检测</string>
     <string name="exactres">解压模型</string>
     <string name="selectimg">选择图片</string>
     <string name="tip_start">点击按钮开始检测</string>
@@ -13,4 +13,5 @@
     <string name="action_exit">退出</string>
     <string name="takephoto">拍摄照片</string>
     <string name="action_copy">重新解压模型</string>
+    <string name="face_detect">人脸检测</string>
 </resources>

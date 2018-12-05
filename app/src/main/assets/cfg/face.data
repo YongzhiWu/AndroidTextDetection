@@ -1,0 +1,5 @@
+classes= 1
+train  = /home/pjreddie/data/coco/trainvalno5k.txt
+names = data/face.names
+backup = /home/pjreddie/backup/
+eval=coco
