@@ -49,6 +49,15 @@
                 android:onClick="analyseClick"
                 android:text="@string/analyse" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+
             <Button
                 android:id="@+id/face_detect"
                 android:layout_width="match_parent"
@@ -56,6 +65,22 @@
                 android:layout_weight="1"
                 android:onClick="faceAnalyseClick"
                 android:text="@string/face_detect" />
+
+            <Button
+                android:id="@+id/face_makeup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="faceMakeupClick"
+                android:text="@string/face_makeup" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

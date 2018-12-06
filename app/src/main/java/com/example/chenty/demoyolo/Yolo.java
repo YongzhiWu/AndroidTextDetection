@@ -35,6 +35,16 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 public class Yolo extends AppCompatActivity {
     private static final int COPY_FALSE = -1;
     private static final int DETECT_FINISH = 1;
@@ -43,6 +53,8 @@ public class Yolo extends AppCompatActivity {
     private static final String TAG = "Mobile Vision";
     private static final int RESULT_LOAD_IMAGE = 3;
     private static final int TAKE_PHOTO = 4;
+    private static final String FACE_OUT = "/sdcard/yolo/face_out.jpg";
+    private static final int FACE_MAKEUP_FINISH = 6;
 
 //    ImageView view_srcimg;
 //    ImageView view_dstimg;
@@ -73,9 +85,31 @@ public class Yolo extends AppCompatActivity {
                 String time_str = String.format("%.3f", time);
                 view_status.setText("run time = " + time_str + "s");
             }
-            else
+            else if (msg.what == FACE_MAKEUP_FINISH){
+                dstimg = BitmapFactory.decodeFile(FACE_OUT);
+                view_img.setImageBitmap(dstimg);
+                double time = (double) msg.obj;
+                String time_str = String.format("%.3f", time);
+                view_status.setText("filter run time = " + time_str + "s");
+            } else
             if (msg.what == COPY_FALSE) {
 
+            }
+        }
+    };
+
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    Log.i(TAG, "OpenCV loaded successfully");
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
             }
         }
     };
@@ -387,6 +421,66 @@ public class Yolo extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void faceMakeupClick(View v){
+        view_status.setText("美颜中 ...");
+        faceMakeup();
+    }
+
+    public void faceMakeup(){
+        new Thread(new Runnable() {
+            public void run() {
+                double runtime = faceFilter(srcimgpath);
+                Log.i(TAG, "filter run time " + runtime);
+                Message msg = new Message();
+                msg.what = FACE_MAKEUP_FINISH;
+                msg.obj = runtime;
+                mHandler.sendMessage(msg);
+            }
+        }).start();
+    }
+
+    public double faceFilter(String imagepath){
+        long startTime = System.currentTimeMillis();
+        Mat image = Imgcodecs.imread(imagepath);
+        Mat dst = new Mat();
+        int value1 = 3, value2 = 1;
+        int dx = value1 * 5; // 双边滤波参数之一
+        double fc = value1 * 12.5; // 双边滤波参数之一
+        double p = 0.1f; // 透明度
+        Mat temp1 = new Mat(), temp2 = new Mat(), temp3 = new Mat(), temp4 = new Mat();
+        Imgproc.bilateralFilter(image, temp1, dx, fc, fc);
+//        temp2 = (temp1 - image + 128);
+        Mat temp22 = new Mat();
+        Core.subtract(temp1, image, temp22);
+        Core.subtract(temp22, new Scalar(128), temp2);
+        Core.add(temp22, new Scalar(128, 128, 128, 128), temp2);
+        Imgproc.GaussianBlur(temp2, temp3, new Size(2 * value2 - 1, 2 * value2 - 1), 0, 0);
+//        temp4 = image + 2 * temp3 - 255;
+        Mat temp44 = new Mat();
+        temp3.convertTo(temp44, temp3.type(), 2, -255);
+        Core.add(image, temp44, temp4);
+//        dst = (image*(100 - p) + temp4*p) / 100;
+        Core.addWeighted(image, p, temp4, 1 - p, 0.0, dst);
+        Core.add(dst, new Scalar(10, 10, 10), dst);
+        Imgcodecs.imwrite(FACE_OUT, dst);
+        long endTime = System.currentTimeMillis();
+        double time = ((double) (endTime - startTime)) / 1000;
+        return time;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_2_0, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
     }
 
 

@@ -14,4 +14,5 @@
     <string name="takephoto">拍摄照片</string>
     <string name="action_copy">重新解压模型</string>
     <string name="face_detect">人脸检测</string>
+    <string name="face_makeup">人脸美颜</string>
 </resources>
